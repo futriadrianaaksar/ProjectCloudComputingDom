@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-Do List Pro</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  width: 360px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+h2 { text-align: center; }
+
+.input-group {
+  display: flex;
+  gap: 6px;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.add-btn {
+  background: #4CAF50;
+  color: white;
+}
+
+.add-btn:hover {
+  background: #45a049;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  margin-top: 6px;
+  background: #f1f1f1;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+li:hover {
+  transform: scale(1.02);
+}
+
+.done {
+  text-decoration: line-through;
+  color: gray;
+  background: #d4edda;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.actions button {
+  margin-left: 5px;
+}
+
+.filter {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.filter button {
+  margin: 3px;
+}
+
+.counter {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 5px;
+  color: #555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>To-Do List 🚀</h2>
+
+  <div class="input-group">
+    <input type="text" id="taskInput" placeholder="Tambah tugas...">
+    <button class="add-btn" onclick="addTask()">Tambah</button>
+  </div>
+
+  <div class="counter" id="counter"></div>
+
+  <div class="filter">
+    <button onclick="setFilter('all')">All</button>
+    <button onclick="setFilter('done')">Done</button>
+    <button onclick="setFilter('pending')">Pending</button>
+  </div>
+
+  <ul id="taskList"></ul>
+</div>
+
+<script>
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+let filter = 'all';
+
+// ENTER key
+document.getElementById('taskInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') addTask();
+});
+
+function save() {
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function render() {
+  const list = document.getElementById('taskList');
+  const counter = document.getElementById('counter');
+
+  list.innerHTML = '';
+
+  let filtered = tasks.filter(task => {
+    if (filter === 'done') return task.done;
+    if (filter === 'pending') return !task.done;
+    return true;
+  });
+
+  filtered.forEach((task, index) => {
+    const li = document.createElement('li');
+
+    const span = document.createElement('span');
+    span.textContent = task.done ? "✅ " + task.text : task.text;
+    if (task.done) span.classList.add('done');
+
+    span.onclick = () => toggleDone(index);
+
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+
+    const editBtn = document.createElement('button');
+    editBtn.textContent = '✏️';
+    editBtn.onclick = () => editTask(index);
+
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '🗑️';
+    delBtn.onclick = () => deleteTask(index);
+
+    actions.appendChild(editBtn);
+    actions.appendChild(delBtn);
+
+    li.appendChild(span);
+    li.appendChild(actions);
+    list.appendChild(li);
+  });
+
+  counter.textContent = `Total: ${tasks.length} | Done: ${tasks.filter(t=>t.done).length}`;
+}
+
+function addTask() {
+  const input = document.getElementById('taskInput');
+  const text = input.value.trim();
+
+  if (!text) return alert('Isi dulu!');
+
+  tasks.push({ text, done: false });
+  update();
+  input.value = '';
+}
+
+function deleteTask(i) {
+  tasks.splice(i, 1);
+  update();
+}
+
+function toggleDone(i) {
+  tasks[i].done = !tasks[i].done;
+  update();
+}
+
+function editTask(i) {
+  const t = prompt('Edit:', tasks[i].text);
+  if (t && t.trim()) {
+    tasks[i].text = t.trim();
+    update();
+  }
+}
+
+function setFilter(f) {
+  filter = f;
+  render();
+}
+
+function update() {
+  save();
+  render();
+}
+
+render();
+</script>
+
+</body>
+</html>
