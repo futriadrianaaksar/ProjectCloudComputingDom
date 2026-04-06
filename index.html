@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Activity Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Daily Activity Tracker (Data Real)</h2>
+
+    <div class="input-group">
+        <div class="row">
+            <label>Aktivitas:</label>
+            <input type="text" id="aktivitas" placeholder="Contoh: Belajar">
+        </div>
+
+        <div class="row">
+            <label>Mulai Jam:</label>
+            <input type="time" id="mulai">
+        </div>
+
+        <div class="row">
+            <label>Selesai Jam:</label>
+            <input type="time" id="selesai">
+        </div>
+
+        <button onclick="tambahAktivitas()">Tambah</button>
+    </div>
+
+    <p id="total">Total: 0 menit (0 aktivitas)</p>
+
+    <ol id="listAktivitas"></ol>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

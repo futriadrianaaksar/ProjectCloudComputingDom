@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    width: 500px;
+    border: 1px solid #ccc;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.row label {
+    width: 150px;
+}
+
+.row input {
+    flex: 1;
+    padding: 6px;
+}
+
+button {
+    padding: 8px 12px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+ol {
+    margin-top: 10px;
+}
